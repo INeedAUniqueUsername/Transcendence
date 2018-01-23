@@ -97,14 +97,14 @@ struct SFontTable
 struct SNewGameSettings
 	{
 	SNewGameSettings (void) :
-			iPlayerGenome(genomeUnknown),
+			dwPlayerGenome(genomeUnknown),
 			dwPlayerShip(0),
 			bFullCreate(false),
 			bDefaultPlayerName(false)
 		{ }
 
 	CString sPlayerName;						//	Character name
-	GenomeTypes iPlayerGenome;					//	Genome
+	DWORD dwPlayerGenome;					//	Genome
 	DWORD dwPlayerShip;							//	Starting ship class
 
 	bool bFullCreate;							//	If TRUE, create all systems
@@ -952,7 +952,7 @@ class CTranscendencePlayer : public IPlayerController
 
 		virtual ICCItem *CreateGlobalRef (CCodeChain &CC) override { return CC.CreateInteger((int)m_pPlayer); }
         virtual CPlayerGameStats *GetGameStats (void) const override { return &m_pPlayer->GetGameStats(); }
-		virtual GenomeTypes GetGenome (void) const override;
+		virtual DWORD GetGenome (void) const override;
 		virtual CString GetName (void) const override;
 		virtual void OnMessageFromObj (CSpaceObject *pSender, const CString &sMessage) override;
 

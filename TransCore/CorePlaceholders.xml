@@ -246,7 +246,48 @@
 <!-- MISCELLANEOUS =============================================================
 
 -->
-	
+	<GenomeType UNID="&geOther;"
+			name=       "Other"
+      species=    "other"
+      gender=     "other"
+      subject=    "they"
+      determiner= "their"
+      possessive= "theirs"
+      object=     "them"
+      address=    ""
+      person=     "other"
+      sibling=    "sibling"
+      child=      "child"
+			/>
+  
+  <GenomeType UNID="&geHumanMale;"
+			name=       "Human Male"
+      species=    "human"
+      gender=     "male"
+      subject=    "he"
+      determiner= "his"
+      possessive= "his"
+      object=     "him"
+      address=    "sir"
+      person=     "man"
+      sibling=    "brother"
+      child=      "son"
+			/>
+  
+<GenomeType UNID="&geHumanFemale;"
+			name=       "Human Female"
+      species=    "human"
+      gender=     "female"
+      subject=    "she"
+      determiner= "her"
+      possessive= "hers"
+      object=     "her"
+      address=    "ma'am"
+      person=     "woman"
+      sibling=    "sister"
+      child=      "daughter"
+			/>
+  
 	<EconomyType UNID="&ecCreditEconomy;"
 			id=				"credit" 
 			currency=		"credit(s)"

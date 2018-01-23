@@ -947,7 +947,7 @@ ICCItem *fnPlyGet (CEvalContext *pEvalCtx, ICCItem *pArgs, DWORD dwData)
 			}
 
 		case FN_PLY_GENOME:
-			pResult = pCC->CreateString(GetGenomeID(pPlayer->GetPlayerGenome()));
+			pResult = pCC->CreateString(g_pUniverse->FindGenomeType(pPlayer->GetPlayerGenome())->GetName());
 			break;
 
 		case FN_PLY_GET_ITEM_STAT:

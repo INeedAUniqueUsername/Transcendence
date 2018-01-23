@@ -143,17 +143,53 @@ void CNewGameSession::CmdCancel (void)
 
 void CNewGameSession::CmdChangeGenome (void)
 
-//	CmdChangeGenom
+//	CmdChangeGenome
 //
 //	Change genome
-
 	{
-	if (m_Settings.iPlayerGenome == genomeHumanMale)
-		m_Settings.iPlayerGenome = genomeHumanFemale;
-	else
-		m_Settings.iPlayerGenome = genomeHumanMale;
+	switch (m_Settings.dwPlayerGenome)
+		{
+		case genomeUnknown:
+			m_Settings.dwPlayerGenome = genomeHumanMale;
+			break;
+		case genomeHumanMale:
+			m_Settings.dwPlayerGenome = genomeHumanFemale;
+			break;
+		case genomeHumanFemale:
+			m_Settings.dwPlayerGenome = UNID_HUMAN_FEMALE;
+		default:
+			//	Find the index of the current genome type
 
-	SetPlayerGenome(m_Settings.iPlayerGenome, m_xPlayerGenome, m_yPlayerGenome, m_cxPlayerGenome);
+			int i;
+			int iIndex = -1;
+			for (i = 0; i < g_pUniverse->GetGenomeTypeCount(); i++)
+				if (g_pUniverse->GetGenomeType(i)->GetUNID() == m_Settings.dwPlayerGenome)
+				{
+					iIndex = i;
+					break;
+				}
+
+			//	Cycle to the next genome type
+
+			CGenomeType *pNewGenomeType;
+			do
+				{
+				if (iIndex == -1 || (iIndex + 1) == g_pUniverse->GetGenomeTypeCount())
+					iIndex = 0;
+				else
+					iIndex++;
+
+				pNewGenomeType = g_pUniverse->GetGenomeType(iIndex);
+				}
+			while (pNewGenomeType->IsVirtual());
+
+			m_Settings.dwPlayerGenome = pNewGenomeType->GetUNID();
+			if (m_Settings.dwPlayerGenome == UNID_UNKNOWN)
+				m_Settings.dwPlayerGenome = genomeUnknown;
+			break;
+		}
+
+	SetPlayerGenome(m_Settings.dwPlayerGenome, m_xPlayerGenome, m_yPlayerGenome, m_cxPlayerGenome);
 	}
 
 void CNewGameSession::CmdEditName (void)
@@ -263,7 +299,7 @@ void CNewGameSession::CmdOK (void)
 
 	SNewGameSettings NewGame;
 	NewGame.sPlayerName = m_Settings.sPlayerName;
-	NewGame.iPlayerGenome = m_Settings.iPlayerGenome;
+	NewGame.dwPlayerGenome = m_Settings.dwPlayerGenome;
 	NewGame.dwPlayerShip = m_ShipClasses[m_iCurShipClass]->GetUNID();
 	NewGame.bDefaultPlayerName = m_Settings.bDefaultPlayerName;
 
@@ -305,7 +341,7 @@ void CNewGameSession::CmdPrevShipClass (void)
 		}
 	}
 
-void CNewGameSession::CreatePlayerGenome (GenomeTypes iGenome, int x, int y, int cxWidth)
+void CNewGameSession::CreatePlayerGenome (DWORD dwGenome, int x, int y, int cxWidth)
 
 //	CreatePlayerGenome
 //
@@ -345,7 +381,7 @@ void CNewGameSession::CreatePlayerGenome (GenomeTypes iGenome, int x, int y, int
 
 	//	Player genome
 
-	SetPlayerGenome(iGenome, x, y, cxWidth);
+	SetPlayerGenome(dwGenome, x, y, cxWidth);
 	}
 
 void CNewGameSession::CreatePlayerName (const CString &sName, int x, int y, int cxWidth)
@@ -575,7 +611,7 @@ ALERROR CNewGameSession::OnInit (CString *retsError)
 
 	//	Create the player genome
 
-	CreatePlayerGenome(m_Settings.iPlayerGenome, m_xPlayerGenome, m_yPlayerGenome, m_cxPlayerGenome);
+	CreatePlayerGenome(m_Settings.dwPlayerGenome, m_xPlayerGenome, m_yPlayerGenome, m_cxPlayerGenome);
 
 	//	Create the ship class
 
@@ -678,7 +714,7 @@ void CNewGameSession::OnUpdate (bool bTopMost)
 	{
 	}
 
-void CNewGameSession::SetPlayerGenome (GenomeTypes iGenome, int x, int y, int cxWidth)
+void CNewGameSession::SetPlayerGenome (DWORD dwGenome, int x, int y, int cxWidth)
 
 //	SetPlayerGenome
 //
@@ -701,7 +737,7 @@ void CNewGameSession::SetPlayerGenome (GenomeTypes iGenome, int x, int y, int cx
 	pGenome->SetPropertyVector(PROP_SCALE, CVector(cxWidth - SMALL_BUTTON_WIDTH - MAJOR_PADDING_HORZ, 100.0));
 	pGenome->SetPropertyColor(PROP_COLOR, VI.GetColor(colorTextDialogLabel));
 	pGenome->SetPropertyFont(PROP_FONT, &SubTitleFont);
-	pGenome->SetPropertyString(PROP_TEXT, strTitleCapitalize(GetGenomeName(iGenome)));
+	pGenome->SetPropertyString(PROP_TEXT, strTitleCapitalize(g_pUniverse->FindGenomeType(dwGenome)->GetName()));
 	pGenome->SetPropertyString(PROP_TEXT_ALIGN_HORZ, ALIGN_RIGHT);
 
 	m_pRoot->AddLine(pGenome);
@@ -713,10 +749,12 @@ void CNewGameSession::SetPlayerGenome (GenomeTypes iGenome, int x, int y, int cx
 		{
 		const CG32bitImage *pImage;
 
-		if (iGenome == genomeHumanMale)
+		if (dwGenome == genomeHumanMale)
 			pImage = &VI.GetImage(imageSmallHumanMale);
-		else
+		else if (dwGenome == genomeHumanFemale)
 			pImage = &VI.GetImage(imageSmallHumanFemale);
+		else
+			pImage = &VI.GetImage(imageSmallHumanMale);
 
 		IAnimatron *pStyle = pButton->GetStyle(STYLE_IMAGE);
 		pStyle->SetFillMethod(new CAniImageFill(pImage, false));

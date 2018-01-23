@@ -466,10 +466,10 @@ class CNewGameSession : public IHISession
 		void CmdNextShipClass (void);
 		void CmdOK (void);
 		void CmdPrevShipClass (void);
-		void CreatePlayerGenome (GenomeTypes iGenome, int x, int y, int cxWidth);
+		void CreatePlayerGenome (DWORD dwGenome, int x, int y, int cxWidth);
 		void CreatePlayerName (const CString &sName, int x, int y, int cxWidth);
 		void CreateShipClass (CShipClass *pClass, int x, int y, int cxWidth);
-		void SetPlayerGenome (GenomeTypes iGenome, int x, int y, int cxWidth);
+		void SetPlayerGenome (DWORD dwGenome, int x, int y, int cxWidth);
 		void SetPlayerName (const CString &sName, int x, int y, int cxWidth);
 		void SetShipClass (CShipClass *pClass, int x, int y, int cxWidth);
 		void SetShipClassDesc (const CString &sDesc, int x, int y, int cxWidth);

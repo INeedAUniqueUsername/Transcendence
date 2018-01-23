@@ -2621,7 +2621,7 @@ ALERROR CTranscendenceModel::StartNewGame (const CString &sUsername, const SNewG
 
 	m_pPlayer->Init(g_pTrans);
 	m_pPlayer->SetName(NewGame.sPlayerName);
-	m_pPlayer->SetGenome(NewGame.iPlayerGenome);
+	m_pPlayer->SetGenome(NewGame.dwPlayerGenome);
 	m_pPlayer->SetStartingShipClass(NewGame.dwPlayerShip);
 
 	//	Inside of InitAdventure we may get called back to set the crawl image
