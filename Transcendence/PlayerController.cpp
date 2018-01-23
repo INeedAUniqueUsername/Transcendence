@@ -2069,7 +2069,7 @@ void CPlayerShipController::ReadFromStream (SLoadCtx &Ctx, CShip *pShip)
 	int i;
 	DWORD dwLoad;
 
-	Ctx.pStream->Read((char *)&m_iGenome, sizeof(DWORD));
+	Ctx.pStream->Read((char *)&m_dwGenome, sizeof(DWORD));
 	Ctx.pStream->Read((char *)&m_dwStartingShipClass, sizeof(DWORD));
 	if (Ctx.dwVersion >= 141)
 		{
@@ -2856,7 +2856,7 @@ void CPlayerShipController::WriteToStream (IWriteStream *pStream)
 
 	GetClass().WriteToStream(pStream);
 
-	pStream->Write((char *)&m_iGenome, sizeof(DWORD));
+	pStream->Write((char *)&m_dwGenome, sizeof(DWORD));
 	pStream->Write((char *)&m_dwStartingShipClass, sizeof(DWORD));
 
 	dwSave = (m_pCharacterClass ? m_pCharacterClass->GetUNID() : 0);

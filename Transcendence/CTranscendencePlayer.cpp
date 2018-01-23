@@ -13,7 +13,7 @@ CTranscendencePlayer::CTranscendencePlayer (void) : m_pPlayer(NULL)
 	{
 	}
 
-GenomeTypes CTranscendencePlayer::GetGenome (void) const
+DWORD CTranscendencePlayer::GetGenome (void) const
 
 //	GetGenome
 //
